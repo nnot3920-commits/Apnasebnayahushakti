@@ -254,12 +254,22 @@
             outline: none;
             background: #fff;
         }
+        /* New Sleek Mail Icon Styling inside OTP box */
         .otp-input-wrap .mail-icon {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .otp-input-wrap .mail-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: #444;
+            stroke-width: 2;
+            fill: none;
         }
         .timer-badge {
             position: absolute;
@@ -350,14 +360,12 @@
 
             <div class="options-row">
                 <a href="#">Register</a>
-                <!-- Round Checkbox for Remember Me -->
                 <label class="custom-checkbox-label">
                     <input type="checkbox" id="remember" checked>
                     <span class="checkmark"></span> Remember Me
                 </label>
             </div>
 
-            <!-- Round Checkbox for Agree Privacy Agreement -->
             <div class="privacy-container">
                 <label class="custom-checkbox-label">
                     <input type="checkbox" id="agree" checked required>
@@ -379,7 +387,7 @@
     <div class="modal-overlay" id="otpModal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>New Device Verification</h3>
+                <h3>Login Otp Verification</h3>
                 <button class="close-btn" id="closeModal">✕</button>
             </div>
             <div class="modal-body">
@@ -388,8 +396,15 @@
                 
                 <form id="otpForm">
                     <div class="otp-input-wrap">
-                        <span class="mail-icon">✉️</span>
-                        <input type="text" id="otpCode" placeholder="OTP Code" maxlength="6" required>
+                        <!-- New Clean Mail Icon SVG -->
+                        <span class="mail-icon">
+                            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </span>
+                        <!-- Number input option for OTP -->
+                        <input type="number" id="otpCode" placeholder="Number" maxlength="6" required>
                         <button type="button" class="timer-badge" id="sendOtpBtn">Send</button>
                     </div>
                     <div class="success-msg" id="successText">✅ OTP Send Successfully!</div>
@@ -483,7 +498,8 @@
             sendOtpBtn.innerText = timeLeft + 's';
             sendOtpBtn.disabled = true;
 
-            clearInterval(countdownIdentifier = setInterval(() => {
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
                 timeLeft--;
                 if (timeLeft > 0) {
                     sendOtpBtn.innerText = timeLeft + 's';
@@ -492,7 +508,7 @@
                     sendOtpBtn.disabled = false;
                     clearInterval(countdownInterval);
                 }
-            }, 1000));
+            }, 1000);
         });
 
         closeModal.addEventListener('click', function() {

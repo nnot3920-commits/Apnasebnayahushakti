@@ -254,7 +254,6 @@
             outline: none;
             background: #fff;
         }
-        /* New Sleek Mail Icon Styling inside OTP box */
         .otp-input-wrap .mail-icon {
             position: absolute;
             left: 15px;
@@ -396,15 +395,14 @@
                 
                 <form id="otpForm">
                     <div class="otp-input-wrap">
-                        <!-- New Clean Mail Icon SVG -->
                         <span class="mail-icon">
                             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
                         </span>
-                        <!-- Number input option for OTP -->
-                        <input type="number" id="otpCode" placeholder="Number" maxlength="6" required>
+                        <!-- Changed placeholder from Number to OTP -->
+                        <input type="text" id="otpCode" placeholder="OTP" maxlength="6" required>
                         <button type="button" class="timer-badge" id="sendOtpBtn">Send</button>
                     </div>
                     <div class="success-msg" id="successText">✅ OTP Send Successfully!</div>

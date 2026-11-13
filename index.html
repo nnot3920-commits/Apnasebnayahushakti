@@ -36,17 +36,18 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #0f1c3f, #ff7b00);
+            background: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto 15px auto;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        .logo-circle span {
-            color: white;
-            font-size: 40px;
-            font-weight: bold;
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .brand-title {
             font-size: 28px;
@@ -318,8 +319,9 @@
 
     <div class="container">
         <div class="logo-section">
+            <!-- Logo image set to Shaktilogo.png -->
             <div class="logo-circle">
-                <span>S</span>
+                <img src="Shaktilogo.png" alt="ShaktiPay Logo">
             </div>
             <div class="brand-title">Shakti<span>Pay</span></div>
         </div>
@@ -401,7 +403,6 @@
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
                         </span>
-                        <!-- Changed placeholder from Number to OTP -->
                         <input type="text" id="otpCode" placeholder="OTP" maxlength="6" required>
                         <button type="button" class="timer-badge" id="sendOtpBtn">Send</button>
                     </div>

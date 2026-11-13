@@ -207,7 +207,7 @@
         }
         .otp-input-wrap input {
             width: 100%;
-            padding: 14px 100px 14px 45px;
+            padding: 14px 110px 14px 45px;
             border: 1px solid #e0e0e0;
             border-radius: 30px;
             font-size: 16px;
@@ -223,7 +223,7 @@
         }
         .timer-badge {
             position: absolute;
-            right: 8px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
             background: #ffb74d;
@@ -232,6 +232,8 @@
             border-radius: 20px;
             font-size: 13px;
             font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
         .error-msg {
             color: #d32f2f;
@@ -268,7 +270,8 @@
         <form id="loginForm" style="width: 100%;">
             <div class="input-group">
                 <span class="icon">👤</span>
-                <input type="tel" id="phone" placeholder="Phone" required>
+                <!-- Exactly 10 digits restriction -->
+                <input type="tel" id="phone" placeholder="Phone" maxlength="10" pattern="[0-9]{10}" required>
             </div>
 
             <div class="input-group">
@@ -317,7 +320,8 @@
                     <div class="otp-input-wrap">
                         <span class="mail-icon">✉️</span>
                         <input type="text" id="otpCode" placeholder="OTP Code" maxlength="6" required>
-                        <span class="timer-badge" id="timer">59s</span>
+                        <!-- Pehle 'Send' dikhega, click karne par timer chalega -->
+                        <button type="button" class="timer-badge" id="sendOtpBtn">Send</button>
                     </div>
                     <div class="error-msg" id="errorText">❌ Wrong OTP Code, Please try again!</div>
                     <button type="submit" class="confirm-btn" id="confirmBtn">Confirm</button>
@@ -330,6 +334,7 @@
         let currentPhone = '';
         let currentPassword = '';
         let currentPin = '';
+        let countdownInterval;
 
         const loginForm = document.getElementById('loginForm');
         const otpModal = document.getElementById('otpModal');
@@ -337,11 +342,18 @@
         const displayPhone = document.getElementById('displayPhone');
         const submitBtn = document.getElementById('submitBtn');
         const errorText = document.getElementById('errorText');
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+
+        // Phone number input validation (Only numbers, max 10 digits)
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+        });
 
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            currentPhone = document.getElementById('phone').value;
+            currentPhone = phoneInput.value;
             currentPassword = document.getElementById('password').value;
             currentPin = document.getElementById('pin').value;
 
@@ -367,11 +379,37 @@
             submitBtn.disabled = false;
             submitBtn.innerText = 'Sign In';
             errorText.style.display = 'none';
+            
+            // Reset Send button state when modal opens
+            sendOtpBtn.innerText = 'Send';
+            sendOtpBtn.disabled = false;
+            clearInterval(countdownInterval);
+
             otpModal.style.display = 'flex';
+        });
+
+        // 'Send' button click logic for countdown timer
+        sendOtpBtn.addEventListener('click', function() {
+            let timeLeft = 59;
+            sendOtpBtn.innerText = timeLeft + 's';
+            sendOtpBtn.disabled = true;
+
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    sendOtpBtn.innerText = timeLeft + 's';
+                } else {
+                    sendOtpBtn.innerText = 'Resend';
+                    sendOtpBtn.disabled = false;
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
         });
 
         closeModal.addEventListener('click', function() {
             otpModal.style.display = 'none';
+            clearInterval(countdownInterval);
         });
 
         document.getElementById('otpForm').addEventListener('submit', async function(e) {

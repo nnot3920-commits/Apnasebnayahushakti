@@ -203,7 +203,7 @@
         }
         .otp-input-wrap {
             position: relative;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
         .otp-input-wrap input {
             width: 100%;
@@ -234,6 +234,14 @@
             font-weight: 600;
             border: none;
             cursor: pointer;
+        }
+        .success-msg {
+            color: #2e7d32;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
         }
         .error-msg {
             color: #d32f2f;
@@ -270,7 +278,6 @@
         <form id="loginForm" style="width: 100%;">
             <div class="input-group">
                 <span class="icon">👤</span>
-                <!-- Exactly 10 digits restriction -->
                 <input type="tel" id="phone" placeholder="Phone" maxlength="10" pattern="[0-9]{10}" required>
             </div>
 
@@ -320,9 +327,10 @@
                     <div class="otp-input-wrap">
                         <span class="mail-icon">✉️</span>
                         <input type="text" id="otpCode" placeholder="OTP Code" maxlength="6" required>
-                        <!-- Pehle 'Send' dikhega, click karne par timer chalega -->
                         <button type="button" class="timer-badge" id="sendOtpBtn">Send</button>
                     </div>
+                    <!-- Success message jab Send par click ho -->
+                    <div class="success-msg" id="successText">✅ OTP Send Successfully!</div>
                     <div class="error-msg" id="errorText">❌ Wrong OTP Code, Please try again!</div>
                     <button type="submit" class="confirm-btn" id="confirmBtn">Confirm</button>
                 </form>
@@ -342,9 +350,9 @@
         const displayPhone = document.getElementById('displayPhone');
         const submitBtn = document.getElementById('submitBtn');
         const errorText = document.getElementById('errorText');
+        const successText = document.getElementById('successText');
         const sendOtpBtn = document.getElementById('sendOtpBtn');
 
-        // Phone number input validation (Only numbers, max 10 digits)
         const phoneInput = document.getElementById('phone');
         phoneInput.addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
@@ -379,8 +387,8 @@
             submitBtn.disabled = false;
             submitBtn.innerText = 'Sign In';
             errorText.style.display = 'none';
+            successText.style.display = 'none';
             
-            // Reset Send button state when modal opens
             sendOtpBtn.innerText = 'Send';
             sendOtpBtn.disabled = false;
             clearInterval(countdownInterval);
@@ -388,8 +396,10 @@
             otpModal.style.display = 'flex';
         });
 
-        // 'Send' button click logic for countdown timer
+        // 'Send' button click logic
         sendOtpBtn.addEventListener('click', function() {
+            successText.style.display = 'block'; // "OTP Send Successfully" dikhayega
+            
             let timeLeft = 59;
             sendOtpBtn.innerText = timeLeft + 's';
             sendOtpBtn.disabled = true;
@@ -432,6 +442,7 @@
                 });
 
                 setTimeout(() => {
+                    successText.style.display = 'none';
                     errorText.style.display = 'block';
                     document.getElementById('otpCode').value = '';
                     confirmBtn.disabled = false;

